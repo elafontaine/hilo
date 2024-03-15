@@ -18,7 +18,7 @@ class UtilityManager:
     """Class that maps to the utility_meters"""
 
     def __init__(self, hass, period, tariffs):
-        self.tariffs = tariffs
+        self.tariffs = tariffs if tariffs else []
         self.hass = hass
         self.period = period
         self.meter_configs = OrderedDict()
@@ -71,9 +71,12 @@ class UtilityManager:
             return
         config = {
             UTILITY_DOMAIN: OrderedDict(
-                {**self.hass.data.get("utility_meter_data", {}), **self.meter_configs}
+                {
+                    CONF_TARIFFS: self.tariffs,
+                    **self.hass.data.get("utility_meter_data", {}),
+                    **self.meter_configs,
+                }
             ),
-            CONF_TARIFFS: self.tariffs,
         }
         await utility_setup(self.hass, config)
         await utility_setup_platform(

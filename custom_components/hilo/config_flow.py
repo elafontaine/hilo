@@ -1,4 +1,5 @@
 """Config flow to configure the Hilo component."""
+
 from __future__ import annotations
 
 import logging
